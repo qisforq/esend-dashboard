@@ -1,0 +1,19 @@
+{
+  "name": "esend-ripple-api-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/eSend/esend-ripple-api-dashboard.git"
+  },
+  "author": "Quentin Vidal",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://gitlab.com/eSend/esend-ripple-api-dashboard/issues"
+  },
+  "homepage": "https://gitlab.com/eSend/esend-ripple-api-dashboard#readme"
+}
