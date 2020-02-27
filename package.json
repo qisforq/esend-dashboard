@@ -2,9 +2,11 @@
   "name": "esend-ripple-api-dashboard",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "react-dev": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -12,8 +14,27 @@
   },
   "author": "Quentin Vidal",
   "license": "UNLICENSED",
+  "private": true,
   "bugs": {
     "url": "https://gitlab.com/eSend/esend-ripple-api-dashboard/issues"
   },
-  "homepage": "https://gitlab.com/eSend/esend-ripple-api-dashboard#readme"
+  "homepage": "https://gitlab.com/eSend/esend-ripple-api-dashboard#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-scripts": "^3.4.0"
+  }
 }
