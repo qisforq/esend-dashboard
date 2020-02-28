@@ -4,5 +4,5 @@ bundle.js
 package-lock.json
 client/dist/bin.js
 client/dist/bundle.js
-client/dist
+client/dist/index.html
 keys.js
