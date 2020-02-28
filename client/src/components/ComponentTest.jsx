@@ -26,6 +26,7 @@ class ComponentTest extends Component {
       <form>
         <input
           type="text"
+          placeholder={"Amount in USD"}
           value={this.state.value}
           onChange={this.handleChange}
         />
@@ -36,5 +37,5 @@ class ComponentTest extends Component {
 
 export default ComponentTest;
 
-// const wrapper = document.getElementById("test-container");
-// wrapper ? ReactDOM.render(<ComponentTest />, wrapper) : false;
+const wrapper = document.getElementById("container-test");
+wrapper ? ReactDOM.render(<ComponentTest />, wrapper) : false;

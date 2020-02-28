@@ -1,8 +1,16 @@
-// const express = require('express');
-// const bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const keys = require('./config/keys');
+require('./services/passport');
 
+const app = express();
 
-// const app = express();
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '/../client/dist')));
 
-// app.use(bodyParser.json());
-// app.use(express.static(path.join(__dirname, '/../client/dist')));
+require('./routes/authRoutes')(app)
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`listening on port ${PORT}!`);
+});

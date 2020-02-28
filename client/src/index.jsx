@@ -31,10 +31,9 @@ class App extends React.Component {
 
 
   render() {
-      var image = 'https://industries.basf.com/images/north-america/USA/Industry/Agriculture/Crop%20Protection/US%20Crop%20Products/Headline_%20AMP_corn_Stock_Getty_176693544_RF_ULS.jpg/_jcr_content/renditions/cq5dam.web.banner_overview.banner_12.jpg'
       return (
         <div >
-          <div className="jumbotron text-center" style={{backgroundImage : `url(${image})`, fontFamily: 'sans-serif'}}>
+          <div className="jumbotron text-center" style={{backgroundImage : `linear-gradient(rgb(70,90,201), rgb(199,205,238))`, fontFamily: 'sans-serif'}}>
           <h1 style={{color : "white"}}>eSend Ripple API Dashboard</h1>
           </div>
           <Users
@@ -51,4 +50,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
-// document.body.appendChild(ComponentTest());

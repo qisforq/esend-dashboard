@@ -5,6 +5,8 @@
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "server-dev": "nodemon index.js",
     "react-dev": "webpack-dev-server --open --mode development",
     "build": "webpack --mode production"
   },
@@ -33,6 +35,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "express": "^4.17.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "^3.4.0"
