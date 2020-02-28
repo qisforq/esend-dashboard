@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-// const keys = require('./config/keys');
 require('./services/passport');
 
 const app = express();
