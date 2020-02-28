@@ -10,6 +10,10 @@
     "react-dev": "webpack-dev-server --open --mode development",
     "build": "webpack --mode production"
   },
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.13.7"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@gitlab.com/eSend/esend-ripple-api-dashboard.git"
