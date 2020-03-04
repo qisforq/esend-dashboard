@@ -7,7 +7,7 @@ const googleClientID = process.env.googleClientID || require('../config/keys').g
 const googleClientSecret = process.env.googleClientSecret || require('../config/keys').googleClientSecret;
 
 passport.serializeUser((user, done) => {
-  console.log(`Serializing the use named ${user.first_name}!`);
+  console.log(`Serializing the user named ${user.first_name}!`);
   
   done(null, user.id)
 });
