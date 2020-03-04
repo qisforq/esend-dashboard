@@ -18,8 +18,8 @@ async function insertUser(firstName, lastName, googleId) {
     connectionString: databaseURI,
     ssl: true,
   });
-  const insertUserText = "INSERT INTO users (first_name, last_name, google_profile_id) VALUES ($1, $2, $3);"
-  const searchUsersText = "SELECT * FROM users WHERE google_profile_id = $1;"
+  const insertUserText = "INSERT INTO senders (first_name, last_name, google_profile_id) VALUES ($1, $2, $3);"
+  const searchUsersText = "SELECT * FROM senders WHERE google_profile_id = $1;"
   
   try {
     await client.connect()
@@ -34,7 +34,7 @@ async function insertUser(firstName, lastName, googleId) {
     } 
     else {
       await client.query(insertUserText, [firstName, lastName, googleId])
-      console.log(`Successfully added ${firstName} to users table`)
+      console.log(`Successfully added ${firstName} to senders table`)
 
       const newUserResult = await client.query(searchUsersText, [googleId])
       // await client.end()
@@ -55,7 +55,7 @@ async function findUserById(id) {
     connectionString: databaseURI,
     ssl: true,
   });
-  const findUserText = "SELECT * FROM users WHERE id = $1;"
+  const findUserText = "SELECT * FROM senders WHERE id = $1;"
   
   try {
     await client.connect()
