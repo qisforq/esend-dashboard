@@ -8,7 +8,6 @@ const googleClientSecret = process.env.googleClientSecret || require('../config/
 
 passport.serializeUser((user, done) => {
   console.log(`Serializing the user named ${user.first_name}!`);
-  console.log(require('../extras').esendGlyph);
   
   done(null, user.id)
 });

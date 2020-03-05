@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 const cookieSession = require('cookie-session')
+const enforce = require('express-sslify')
+
 const keys = require('./config/keys')
 const glyph = require('./extras')
 
@@ -18,6 +20,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(enforce.HTTPS({ trustProtoHeader: true }))
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 
