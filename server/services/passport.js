@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-// const keys = require('../config/keys');
 const db = require('../../database/dbHelpers');
+const glyph = require('../extras');
 
 const googleClientID = process.env.googleClientID || require('../config/keys').googleClientID;
 const googleClientSecret = process.env.googleClientSecret || require('../config/keys').googleClientSecret;
@@ -20,11 +20,12 @@ passport.deserializeUser((id, done) => {
       console.log(`Deserializing the user named ${user.first_name}!`);
       done(null, user)
     } else {
+      console.log(glyph.errorGlyph)
       console.error('ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ bad session cookie! Invaliditing login session.');
       done(null, false)
     }
   })
-  .catch(err => console.error('ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ', err))
+  .catch(err => console.error(glyph.errorGlyph,' ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ ', err))
 })
 
 passport.use(new GoogleStrategy({
@@ -32,15 +33,19 @@ passport.use(new GoogleStrategy({
   clientSecret: googleClientSecret,
   callbackURL: '/auth/google/callback',
   proxy: true
-}, (accessToken, refreshToken, profile, done) => {
+}, async (accessToken, refreshToken, profile, done) => {
   const { id, name } = profile
   const firstName = name.givenName
   const lastName = name.familyName
-  db.insertUser(firstName, lastName, id)
-  .then(user => {
+
+  try {
+    const user = await db.insertUser(firstName, lastName, id)
     console.log('( ͡° ͜ʖ ͡°)', user);
     done(null, user)
-  })
-  .catch(err => done(err))
-
+  }
+  catch(err) {
+    console.log(glyph.errorGlyph);
+    console.error(err)
+    done(err)
+  }
 }))
