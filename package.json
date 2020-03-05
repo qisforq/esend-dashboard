@@ -6,9 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./server/index.js",
+    "build": "webpack --mode production",
     "server-dev": "nodemon ./server/index.js",
-    "react-dev": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production"
+    "react-dev": "webpack -d --watch",
+    "react-dev2": "webpack-dev-server --open --mode development",
+    "dev": "concurrently \"npm run react-dev\" \"npm run server-dev\""
   },
   "engines": {
     "node": "10.15.3",
@@ -30,6 +32,7 @@
     "@babel/preset-env": "^7.8.6",
     "@babel/preset-react": "^7.8.3",
     "babel-loader": "^8.0.6",
+    "concurrently": "^5.1.0",
     "css-loader": "^3.4.2",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
