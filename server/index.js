@@ -28,12 +28,15 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 
 require('./routes/authRoutes')(app)
+
+app.get('/*', (req, res) => res.sendFile('index.html', { root: path.join(__dirname, '/../client/dist') }));
+/* ^^^^^ Paths that are handled by the client-side router (CSR), i.e. React Router, don't actually have any handling logic here in the server.
+Therefore, all routes that were not handled by authRoutes (or any other route logic), should just redirect to index.html. */
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}!`);
   console.log(glyph.esendGlyph);
   console.log(glyph.bannerMessage);
-  
-  
-  
 });
