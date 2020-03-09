@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 import Header from './Header.jsx'
 
@@ -17,21 +19,27 @@ const NotFound = () => {
 }
 
 
-const App = () => {
-  return (
-    <div className="container">
-      <Router>
-        <div>
-          <Header />
-          <Switch>
-            <Route exact path="/"><Landing /></Route>
-            <Route path="/history" component={TransactionHistory} />
-            <Route path="/mexico/send-money"><SendMoney /></Route>
-            <Route path="/*" component={NotFound} />
-          </Switch>
-        </div>
-      </Router>
-    </div>
-  );
+class App extends Component {
+  componentDidMount() {
+    this.props.fetchUser();
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <Router>
+          <div>
+            <Header />
+            <Switch>
+              <Route exact path="/"><Landing /></Route>
+              <Route path="/history" component={TransactionHistory} />
+              <Route path="/mexico/send-money"><SendMoney /></Route>
+              <Route path="/*" component={NotFound} />
+            </Switch>
+          </div>
+        </Router>
+      </div>
+    );
+  }
 };
-export default App;
+export default connect(null, actions)(App);

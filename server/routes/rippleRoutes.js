@@ -1,5 +1,7 @@
 /*
-NOTE: This is just to remind myself of what strategy I can use to store 
+TODO: you should implement payment routes here.
+
+NOTE: I need to make sure I use a good strategy to store 
 the Ripple access_token, which expires every half hour.
 
 I think the access_token should be stored in the database.
