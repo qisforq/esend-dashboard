@@ -24,14 +24,10 @@ class Dashboard extends Component {
               </Col>
               <Col></Col>
             </Row>
+            <Row><br/></Row>
             <Row>
-              <Link to={'/mexico/send-money'}>
-                <Button variant="dark">Send Money</Button>
-              </Link>
               &nbsp; &nbsp;
-              <Link to={'/history'}>
-                <Button variant="dark">Transaction History</Button>
-              </Link>
+              <Link to={'/history'}><Button variant="dark">Transaction History</Button></Link>
             </Row>
           </Container>
       )

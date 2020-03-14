@@ -4,11 +4,16 @@ const passport = require('passport');
 const path = require('path');
 const cookieSession = require('cookie-session')
 const enforce = require('express-sslify')
-
 const keys = require('./config/keys')
 const glyph = require('./extras')
 
+
 require('./services/passport');
+
+// Start CRON jobs:
+require('./cronJobs/rippleAuthCron');
+// Note: This is to start the Ripple Auth CRON JOB. Whenever using the Ripple Auth Token, for some reason the first time you call it it's just an empty object. So we have to require it onetime first before it works. Which is why we are requiring it here. 
+require('./cronJobs/fxRateCron');
 
 const app = express();
 
@@ -28,6 +33,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 
 require('./routes/authRoutes')(app)
+require('./routes/rippleRoutes')(app)
 
 app.get('/*', (req, res) => res.sendFile('index.html', { root: path.join(__dirname, '/../client/dist') }));
 /* ^^^^^ Paths that are handled by the client-side router (CSR), i.e. React Router, don't actually have any handling logic here in the server.
@@ -40,3 +46,9 @@ app.listen(PORT, () => {
   console.log(glyph.esendGlyph);
   console.log(glyph.bannerMessage);
 });
+
+
+// setTimeout(() => console.log("test 1->>>",require('./cronJobs/fxRateCron')), 7000)
+// setTimeout(() => console.log("test 2->>>",require('./cronJobs/fxRateCron')), 12000)
+// setTimeout(() => console.log("test 3->>>",require('./cronJobs/fxRateCron')), 17000)
+// setTimeout(() => console.log("test 4->>>",require('./cronJobs/fxRateCron')), 22000)

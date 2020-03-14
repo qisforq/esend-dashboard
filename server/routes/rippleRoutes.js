@@ -1,19 +1,18 @@
-/*
-TODO: you should implement payment routes here.
+const { createQuoteCollections } = require('../services/rippleCalls');
 
-NOTE: I need to make sure I use a good strategy to store 
-the Ripple access_token, which expires every half hour.
 
-I think the access_token should be stored in the database.
-
-There should be a CRON job that refreshes the token every hour, and persists it to database.
-You can use either node-schedule or node-cron
-NOTE: You can also use this to update the exchange rate that'll be published on the main page
-*/
 module.exports = (app) => {
 
-  app.get('/ripple_payment?', (req, res) => {
+  app.get('/fx_rate/usdmxn', async (req, res) => {
 
+    
+    res.send({usdmxnRate: require('../cronJobs/fxRateCron')})
   })
 
 };
+
+
+// setTimeout(() => console.log("test 1->>>",require('../services/rippleAuthCron')), 7000)
+// setTimeout(() => console.log("test 2->>>",require('../services/rippleAuthCron')), 12000)
+// setTimeout(() => console.log("test 3->>>",require('../services/rippleAuthCron')), 17000)
+// setTimeout(() => console.log("test 4->>>",require('../services/rippleAuthCron')), 22000)

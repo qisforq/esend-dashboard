@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const db = require('../../database/dbHelpers');
+const db = require('../../database/dbCalls');
 const glyph = require('../extras');
 
 const googleClientID = process.env.googleClientID || require('../config/keys').googleClientID;
