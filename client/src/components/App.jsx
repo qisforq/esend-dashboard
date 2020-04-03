@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import Container from 'react-bootstrap/Container'
 
 import Header from './Header.jsx';
 import Landing from './Landing.jsx';
 import NotFound from './NotFound.jsx'
 import Dashboard from './Dashboard.jsx'
-const SendMoney = () => <h2>New Transaction</h2>
+import SendMoney from './SendMoney.jsx'
 const TransactionHistory = () => <h2>Transaction History</h2>
 
 
@@ -16,6 +15,20 @@ const TransactionHistory = () => <h2>Transaction History</h2>
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
+    this.props.fetchUsdMxnRate();
+    this.props.updateSendAmount();
+  }
+
+  renderDashboard() {
+    // check if user is logged in to decide whether to render Landing, or redirect to the dashboard
+    switch(this.props.auth) {
+      case null:
+        return;
+      case false:
+        return <Landing />;
+      default:
+        return <Redirect to='/dashboard'/>;
+    }
   }
 
   render() {
@@ -25,7 +38,7 @@ class App extends Component {
           <div>
             <Header />
               <Switch>
-                <Route exact path="/"><Landing /></Route>
+                <Route exact path="/">{this.renderDashboard()}</Route>
                 <Route path="/history" component={TransactionHistory} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/mexico/send-money"><SendMoney /></Route>
@@ -37,4 +50,9 @@ class App extends Component {
     );
   }
 };
-export default connect(null, actions)(App);
+
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+
+export default connect(mapStateToProps, actions)(App);

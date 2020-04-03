@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
@@ -15,28 +17,46 @@ class Calculator extends Component {
     super(props);
 
     this.state = {
-      sendAmount: 0,
+      // sendAmount: props.sendAmount,
       receiveAmount: 0,
       readyToTransfer: false,
     };
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.updateReceiveAmount = this.updateReceiveAmount.bind(this)
   }
 
-  handleChange(event){
-    let num = parseFloat(event.target.value) || 0.00
-    console.log(num);
-    console.log(num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+  componentDidMount() {
+    // this.props.updateSendAmount();
+    // this.setState({sendAmount: this.props.sendAmount})
+    this.updateReceiveAmount()
+  }
 
-    this.setState({
-      [event.target.id]: num
-    });
+  async handleChange(event){
+    let num = parseFloat(event.target.value) || 0.00
+    await this.props.updateSendAmount(num)
+    // await this.setState({
+    //   [event.target.id]: num
+    // })
+    await this.updateReceiveAmount();
+    console.log("this.props.sendAmount:", this.props.sendAmount)
   }
 
   async handleSubmit(e){
     e.preventDefault();
-    console.log(e)
+    // await this.props.updateSendAmount(this.state.sendAmount)
+    await this.props.lockQuote(this.state.receiveAmount.toFixed(2))
     await this.setState({readyToTransfer: true})
+  }
+
+  updateReceiveAmount() {
+    let rate = this.props.usdMxnRate;
+    // let { sendAmount } = this.state;
+    let { sendAmount } = this.props;
+    let receiveAmount = sendAmount * rate;
+    this.setState({
+      receiveAmount,
+    })
   }
 
   render() {
@@ -64,7 +84,7 @@ class Calculator extends Component {
                         <InputGroup>
                           <Form.Control 
                             placeholder="Send Amount"
-                            value={this.state.sendAmount || ""}
+                            value={this.props.sendAmount || ""}
                             onChange={this.handleChange}
                             type="number"
                           />
@@ -79,11 +99,12 @@ class Calculator extends Component {
                         <Form.Label>They Receive</Form.Label>
                         <InputGroup>
                           <Form.Control
-                            disabled
+                            // disabled
+                            readOnly
                             placeholder="Receive Amount"
-                            value={this.state.receiveAmount || ""}
-                            onChange={this.handleChange}
-                            type="number"
+                            value={this.state.receiveAmount > 0 ? this.state.receiveAmount.toFixed(2) : ""}
+                            // onChange={this.handleChange}
+                            // type="number"
                           />
                           <InputGroup.Append>
                             <InputGroup.Text id="mxn">MXN</InputGroup.Text>
@@ -91,6 +112,11 @@ class Calculator extends Component {
                         </InputGroup>
                       </Form.Group>
                     </Col>
+                  </Row>
+                  <Row className="justify-content-center">
+                    <Form.Text className="text-muted">
+                      {`1 USD = ${this.props.usdMxnRate > 0 ? this.props.usdMxnRate.toFixed(4) : '( ͡° ͜ʖ ͡°) We\'re still doing the math, but it\'ll be a whole bunch of'} MXN`}
+                    </Form.Text>
                   </Row>
                   <Row><br/></Row>
                   <Row className="justify-content-center">
@@ -108,4 +134,19 @@ class Calculator extends Component {
     )
   }
 }
-export default Calculator;
+
+function mapStateToProps(state) {
+  console.log(state);
+  
+  let usdMxnRate = 0;
+  if (state.ripple) {
+    usdMxnRate = state.ripple.usdMxnRate
+  }
+  let sendAmount = state.sendMoney || 0;
+  return { 
+    usdMxnRate, 
+    sendAmount,
+  };
+}
+
+export default connect(mapStateToProps, actions)(Calculator);

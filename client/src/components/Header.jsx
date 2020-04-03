@@ -15,7 +15,6 @@ class Header extends Component {
         return <Nav.Link href="/auth/google" active><Button variant="outline-light" size="md">Login With Google</Button></Nav.Link>
       default:
         return <Nav.Link href="/api/logout" active><Button variant="outline-light" size="md">Logout</Button></Nav.Link>
-
     }
   }
 

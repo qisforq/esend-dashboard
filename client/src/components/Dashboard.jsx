@@ -7,16 +7,21 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-class Dashboard extends Component {
-  renderContent() {
-    const userLoggedIn = !!this.props.userInfo
+const Dashboard = (props) => {
+    const userLoggedIn = !!props.userInfo
     if (userLoggedIn) {
       return (
           <Container >
             <Row><br /></Row>
-            <Row className="justify-content-end">
-              <h4>{`Welcome, ${this.props.userInfo.first_name}`}</h4>
+            <Row>
+              <Col>
+                <h2>Dashboard</h2>
+              </Col>
+              <Col xs={{ span: 4 }}>
+                <h5>{`Welcome, ${props.userInfo.first_name}`}</h5>
+              </Col>
             </Row>
+            <Row><br/></Row>
             <Row>
               <Col></Col>
               <Col xs="auto">
@@ -31,12 +36,18 @@ class Dashboard extends Component {
             </Row>
           </Container>
       )
+    } else {
+      return (
+      <Container >
+        <Row><br /></Row>
+        <Row>
+          <Col>
+            <h2>Dashboard</h2>
+          </Col>
+        </Row>
+      </Container>
+      )
     }
-  }
-
-  render() {
-    return <div>{this.renderContent()}</div>
-  }
 }
 
 

@@ -21,11 +21,10 @@ async function getRippleAuthToken() {
   }
 }
 
-const createQuoteCollections = async (senderAmount = 100) => {
+const createQuoteCollections = async (amount = 100, quoteType = "SENDER_AMOUNT") => {
   const DISABLESSL = new require('https').Agent({  
     rejectUnauthorized: false
   });
-
   // WARNING: We may not want to Disable the SSL certificate in production.
   // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
   // see here for more info: https://stackoverflow.com/questions/51363855/how-to-configure-axios-to-use-ssl-certificate
@@ -33,22 +32,33 @@ const createQuoteCollections = async (senderAmount = 100) => {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
     httpsAgent: DISABLESSL,
   };
+  let currency = "USD"
+  if (quoteType === "RECEIVER_AMOUNT") currency = "MXN"
+  
   const url = 'https://gomama.test.ripplexcurrent.com/v4/quote_collections'
   const body = {
     sending_address: "test.usa.gomama",
     receiving_address: "test.xrapid.gomama",
-    amount: senderAmount,
-    currency: "USD",
-    quote_type: "SENDER_AMOUNT"
+    amount,
+    currency,
+    quote_type: quoteType,
+    // payment_method: "spei"
+    // NOTE: ^^^^ uncomment above line in order to send transaction to the SPEI network
   }
 
   try {
     const { data } = await axios.post(url, body, config)
-    return data
+
+    if (data === undefined) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: data is undefined (createQuoteCollections in rippleCalls.js)`
+    } else if (data.error) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: ${data.error} (createQuoteCollections in rippleCalls.js)`
+    } else {
+      return data 
+    }
   }
   catch (e) {
-    console.log(errorGlyph, "in createQuoteCollections");
-    console.error(e)
+    console.error(errorGlyph, e.message, "ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ Error from Ripple:", e.response.data.error, "(createQuoteCollections in rippleCalls.js)")
   }
   
 }
