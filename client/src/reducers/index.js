@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import authReducer from './authReducer';
-import rippleReducer from './rippleReducer';
-import sendMoneyReducer from './sendMoneyReducer';
+import fxRateReducer from './fxRateReducer';
+import amountsReducer from './amountsReducer';
+import lockQuoteReducer from './lockQuoteReducer';
 
 export default combineReducers({
   auth: authReducer,
-  ripple: rippleReducer,
-  sendMoney: sendMoneyReducer,
+  fxRate: fxRateReducer,
+  amounts: amountsReducer,
+  rippleData: lockQuoteReducer
 });

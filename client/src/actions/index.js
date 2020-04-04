@@ -9,7 +9,7 @@ export const fetchUser = () => async dispatch => {
 export const fetchUsdMxnRate = () => async (dispatch) => {
   const { data } = await axios.get('/fx_rate/usdmxn')
   dispatch({ type: type.FETCH_USDMXN_RATE, payload: data })
-  // Dispatches to rippleReducer
+  // Dispatches to fxRateReducer
 }
 
 export const updateSendAmount = (sendAmount = 0) => (
@@ -17,15 +17,15 @@ export const updateSendAmount = (sendAmount = 0) => (
     type: type.UPDATE_SEND_AMOUNT,
     payload: sendAmount
   }
-  // Dispatches to sendMoneyReducer
+  // Dispatches to amountsReducer
 );
 
-// export const updateReceiveAmount = (receiveAmount = 0) => (
-//   {
-//     type: type.UPDATE_RECEIVE_AMOUNT,
-//     payload: receiveAmount
-//   }
-// );
+export const updateReceiveAmount = (receiveAmount = 0) => (
+  {
+    type: type.UPDATE_RECEIVE_AMOUNT,
+    payload: receiveAmount
+  }
+);
 
 export const lockQuote = (receiveAmount) => async (dispatch) => {
   const { data } = await axios.post('/ripple/create-quote', {

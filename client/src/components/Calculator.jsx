@@ -17,42 +17,40 @@ class Calculator extends Component {
     super(props);
 
     this.state = {
-      // sendAmount: props.sendAmount,
       receiveAmount: 0,
       readyToTransfer: false,
     };
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.updateReceiveAmount = this.updateReceiveAmount.bind(this)
+    this.calculateReceiveAmount = this.calculateReceiveAmount.bind(this)
   }
 
   componentDidMount() {
-    // this.props.updateSendAmount();
-    // this.setState({sendAmount: this.props.sendAmount})
-    this.updateReceiveAmount()
+    this.calculateReceiveAmount()
+    // You have to call calculateReceiveAmount here so that way if the user is navigating back from the SendMoney page, the recipient amount will render
   }
 
   async handleChange(event){
-    let num = parseFloat(event.target.value) || 0.00
-    await this.props.updateSendAmount(num)
+    let sendAmount = parseFloat(event.target.value) || 0.00
+    
+    await this.props.updateSendAmount(sendAmount)
     // await this.setState({
     //   [event.target.id]: num
     // })
-    await this.updateReceiveAmount();
-    console.log("this.props.sendAmount:", this.props.sendAmount)
+    await this.calculateReceiveAmount();
+    // console.log("this.props.amounts:", this.props.amounts)
   }
 
   async handleSubmit(e){
     e.preventDefault();
-    // await this.props.updateSendAmount(this.state.sendAmount)
     await this.props.lockQuote(this.state.receiveAmount.toFixed(2))
+    await this.props.updateReceiveAmount(parseFloat(this.state.receiveAmount.toFixed(2)))
     await this.setState({readyToTransfer: true})
   }
 
-  updateReceiveAmount() {
+  calculateReceiveAmount() {
     let rate = this.props.usdMxnRate;
-    // let { sendAmount } = this.state;
-    let { sendAmount } = this.props;
+    let { sendAmount } = this.props.amounts;
     let receiveAmount = sendAmount * rate;
     this.setState({
       receiveAmount,
@@ -84,7 +82,7 @@ class Calculator extends Component {
                         <InputGroup>
                           <Form.Control 
                             placeholder="Send Amount"
-                            value={this.props.sendAmount || ""}
+                            value={this.props.amounts.sendAmount || ""}
                             onChange={this.handleChange}
                             type="number"
                           />
@@ -136,16 +134,17 @@ class Calculator extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
+  console.log("Calculator state", state);
   
   let usdMxnRate = 0;
-  if (state.ripple) {
-    usdMxnRate = state.ripple.usdMxnRate
+  if (state.fxRate) {
+    usdMxnRate = state.fxRate
   }
-  let sendAmount = state.sendMoney || 0;
+  // let sendAmount = state.amounts.sendAmount || 0;
   return { 
     usdMxnRate, 
-    sendAmount,
+    // sendAmount,
+    amounts: state.amounts
   };
 }
 

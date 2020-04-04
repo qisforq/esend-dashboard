@@ -13,9 +13,10 @@ module.exports = (app) => {
     // if (quoteData.quotes.length === 0) {
     //   res.send({ERROR: quoteData.quote_errors})
     // }
-    // TODO: TOMORROW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     let fxRate = calculateEsendUsdMxnRate(quoteData)
-    res.send({ quoteData, usdMxnRate: fxRate })
+    let quoteId = quoteData.quotes[0].quote_id
+    let rippleSendingAmountUSD = quoteData.quotes[0].quote_elements[0].sending_amount
+    res.send({ quoteId, rippleSendingAmountUSD, rippleFxRate: fxRate })
     // TODO: Post quoteData to the database at this point, and then only send the necessary data to the client (i.e. sendAmount and receiveAmount and fx_rate)
   })
 };
