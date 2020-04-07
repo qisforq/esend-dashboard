@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import {Link} from 'react-router-dom';
+
 import { connect } from 'react-redux';
 import ESENDInternalData from './ESENDInternalData.jsx';
 import KYCInfo from './KYCInfo.jsx';
@@ -15,7 +14,7 @@ import Form from 'react-bootstrap/Form';
 
 const SendMoney = (props) => {
   console.log("props:",props)
-  const { sendAmount, receiveAmount, fxRate, rippleData } = props;
+  const { sendAmount, receiveAmount, fxRate } = props;
  
   return (
     <Container xs="auto">
@@ -52,16 +51,6 @@ const SendMoney = (props) => {
         </Form>
       </Row>
       <KYCInfo />
-      <br />
-      <Row>
-        <Col xs="auto">
-          <Link to={'/dashboard'}><Button variant="dark">Go Back</Button></Link>
-        </Col>
-        <Col xs="auto">
-          <Button variant="dark">Submit</Button>
-        </Col>
-      </Row>
-      <br />
       <ESENDInternalData />
     </Container>
   )
@@ -73,7 +62,7 @@ function mapStateToProps(state) {
     sendAmount: amounts.sendAmount || 0,
     receiveAmount: amounts.receiveAmount || 0,
     fxRate,
-    rippleData,
+    // rippleData,
   };
 }
 

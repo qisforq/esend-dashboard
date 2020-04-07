@@ -6,7 +6,8 @@ import Form from 'react-bootstrap/Form';
 
 const EsendInternalData = (props) => {
   const { sendAmount, rippleData } = props;
- 
+  if (rippleData && rippleData.payment_state) return <div />;
+  
   return (
       <Row>
         <Form>

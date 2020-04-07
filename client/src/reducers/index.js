@@ -2,11 +2,13 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import fxRateReducer from './fxRateReducer';
 import amountsReducer from './amountsReducer';
-import lockQuoteReducer from './lockQuoteReducer';
+import rippleReducer from './rippleReducer';
+import kycReducer from './kycReducer';
 
 export default combineReducers({
   auth: authReducer,
   fxRate: fxRateReducer,
   amounts: amountsReducer,
-  rippleData: lockQuoteReducer
+  rippleData: rippleReducer,
+  kyc: kycReducer,
 });

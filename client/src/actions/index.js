@@ -27,10 +27,37 @@ export const updateReceiveAmount = (receiveAmount = 0) => (
   }
 );
 
+// ~~~~~~~~~~~~~~~~~KYC ACTIONS~~~~~~~~~~~~~~~~~~~~~
+export const updateRecipientKYC = (info = {}) => (
+  {
+    type: type.UPDATE_RECIPIENT_KYC,
+    payload: info
+  }
+  // Dispatches to kycReducer
+);
+
+export const updateSenderKYC = (info = {}) => (
+  {
+    type: type.UPDATE_SENDER_KYC,
+    payload: info
+  }
+  // Dispatches to kycReducer
+);
+
+// ~~~~~~~~~~~~~~~~~RIPPLE ACTIONS~~~~~~~~~~~~~~~~~~~~~
 export const lockQuote = (receiveAmount) => async (dispatch) => {
-  const { data } = await axios.post('/ripple/create-quote', {
-    receiveAmount: receiveAmount
-  })
+  const { data } = await axios.post('/ripple/create-quote', { receiveAmount })
   dispatch({type: type.LOCK_RIPPLE_QUOTE, payload: data})
+  // Dispatches to rippleReducer
+}
+
+export const acceptQuote = (quoteId, recipientFirstName, recipientLastName, clabe) => async (dispatch) => {
+  const { data } = await axios.post('/ripple/accept-quote', { 
+    quoteId, 
+    recipientFirstName, 
+    recipientLastName, 
+    clabe
+  });
+  dispatch({type: type.ACCEPT_RIPPLE_QUOTE, payload: data});
   // Dispatches to rippleReducer
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import { updateSendAmount, updateReceiveAmount, lockQuote } from '../actions';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,10 +15,9 @@ import Col from "react-bootstrap/Col";
 class Calculator extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       receiveAmount: 0,
-      readyToTransfer: false,
+      //readyToTransfer: false,
     };
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -41,11 +40,11 @@ class Calculator extends Component {
     // console.log("this.props.amounts:", this.props.amounts)
   }
 
-  async handleSubmit(e){
-    e.preventDefault();
+  async handleSubmit(e) {
     await this.props.lockQuote(this.state.receiveAmount.toFixed(2))
     await this.props.updateReceiveAmount(parseFloat(this.state.receiveAmount.toFixed(2)))
-    await this.setState({readyToTransfer: true})
+    // await this.setState({readyToTransfer: true})
+    this.props.history.push("/send-money")
   }
 
   calculateReceiveAmount() {
@@ -58,9 +57,8 @@ class Calculator extends Component {
   }
 
   render() {
-    if (this.state.readyToTransfer) {
-      return <Redirect to='/mexico/send-money'/>
-    }
+    // if (this.state.readyToTransfer) return <Redirect to='/send-money'/>
+    // else 
     return (
         <Container>
           <Row><h4>Send Money to Mexico!</h4></Row>
@@ -148,4 +146,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(Calculator);
+function mapDispatchToProps(dispatch) {
+  return {
+    updateSendAmount: (sendAmount) => dispatch(updateSendAmount(sendAmount)),
+    updateReceiveAmount: (receiveAmount) => dispatch(updateReceiveAmount(receiveAmount)),
+    lockQuote: (receiveAmount) => dispatch(lockQuote(receiveAmount)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Calculator));

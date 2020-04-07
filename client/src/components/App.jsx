@@ -8,6 +8,7 @@ import Landing from './Landing.jsx';
 import NotFound from './NotFound.jsx'
 import Dashboard from './Dashboard.jsx'
 import SendMoney from './SendMoney.jsx'
+import TransactionReview from './TransactionReview.jsx'
 const TransactionHistory = () => <h2>Transaction History</h2>
 
 
@@ -17,6 +18,7 @@ class App extends Component {
     this.props.fetchUser();
     this.props.fetchUsdMxnRate();
     this.props.updateSendAmount();
+    console.log(this.props)
   }
 
   renderDashboard() {
@@ -41,7 +43,8 @@ class App extends Component {
                 <Route exact path="/">{this.renderDashboard()}</Route>
                 <Route path="/history" component={TransactionHistory} />
                 <Route path="/dashboard" component={Dashboard} />
-                <Route path="/mexico/send-money"><SendMoney /></Route>
+                <Route exact path="/send-money"><SendMoney /></Route>
+                <Route path="/send-money/review" component={TransactionReview} />
                 <Route path="/*" component={NotFound} />
               </Switch>
           </div>
@@ -52,6 +55,7 @@ class App extends Component {
 };
 
 function mapStateToProps({ auth }) {
+  
   return { auth };
 }
 
