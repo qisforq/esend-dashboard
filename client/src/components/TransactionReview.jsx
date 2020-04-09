@@ -13,14 +13,12 @@ import {  acceptQuote } from '../actions';
 
 
 const TransactionReview = (props) => {
-  console.log("props:",props)
   const { sendAmount, receiveAmount, fxRate, senderFirstName, senderLastName, recipientFirstName, recipientLastName, clabe, quoteId, acceptQuote, rippleData } = props;
   const [showError, setShowError] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
 
   const handleSubmit = async () => {
     try {
-      console.log("quoteId", quoteId);
       await acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe)
       console.log("transaction", quoteId,"accepted by Ripple!!");
       setShowSuccess(true)
@@ -115,9 +113,6 @@ const TransactionReview = (props) => {
 }
 
 function mapStateToProps(state) {
-  console.log("state", state)
-  console.log(`ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ•̫͡•ʕ•̫͡•ʔ•̫͡•ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ
-rippleData inside TransactionReview mapStateToProps:`,state.rippleData);
   let { amounts, fxRate, rippleData, kyc } = state;
   if (!Object.entries(kyc).length) kyc = {senderInfo: {senderFirstName: 'N/A', senderLastName: ''}, recipientInfo: {recipientFirstName: 'N/A', recipientLastName: '', clabe: 'N/A'}};
   if (!rippleData) rippleData = {quoteId: 'N/A'}

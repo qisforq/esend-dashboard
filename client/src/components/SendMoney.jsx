@@ -13,7 +13,6 @@ import Form from 'react-bootstrap/Form';
 
 
 const SendMoney = (props) => {
-  console.log("props:",props)
   const { sendAmount, receiveAmount, fxRate } = props;
  
   return (
@@ -56,7 +55,6 @@ const SendMoney = (props) => {
   )
 }
 function mapStateToProps(state) {
-  console.log("state", state)
   let { amounts, fxRate } = state;
   return { 
     sendAmount: amounts.sendAmount || 0,

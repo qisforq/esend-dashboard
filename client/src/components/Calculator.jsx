@@ -32,15 +32,17 @@ class Calculator extends Component {
   }
 
   async handleChange(event){
-    let sendAmount = parseFloat(event.target.value) || 0.00
+    let sendAmount = event.target.value;
+    if (sendAmount === "") sendAmount = 0;
+    else sendAmount = parseFloat(event.target.value);
     
-    await this.props.updateSendAmount(sendAmount)
-    // await this.setState({
-    //   [event.target.id]: num
-    // })
-    await this.calculateReceiveAmount();
-    // console.log("this.props.amounts:", this.props.amounts)
-    console.log(this.state.receiveAmount);
+    if (!Number.isNaN(sendAmount)) {
+      await this.props.updateSendAmount(sendAmount)
+      // await this.setState({
+      //   [event.target.id]: num
+      // })
+      await this.calculateReceiveAmount();
+    }
     
   }
 
@@ -72,7 +74,7 @@ class Calculator extends Component {
     return (
         <Container>
           <Row>
-            {this.state.showError ? (<Alert variant="danger">The minimum amount you can send is $26.</Alert>) : (<h4>Send Money to Mexico!</h4>)} 
+            {this.state.showError ? (<Alert variant="danger" dismissible onClose={() => this.setState({showError: false})}>The minimum amount you can send is $26.</Alert>) : (<h4>Send Money to Mexico!</h4>)} 
           </Row>
           <Row>
             <Card>
@@ -94,7 +96,7 @@ class Calculator extends Component {
                             placeholder="Send Amount"
                             value={this.props.amounts.sendAmount || ""}
                             onChange={this.handleChange}
-                            type="number"
+                            // type="number"
                           />
                           <InputGroup.Append>
                             <InputGroup.Text id="usd">USD</InputGroup.Text>
@@ -144,8 +146,6 @@ class Calculator extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("Calculator state", state);
-  
   let usdMxnRate = 0;
   if (state.fxRate) {
     usdMxnRate = state.fxRate

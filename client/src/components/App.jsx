@@ -18,7 +18,6 @@ class App extends Component {
     this.props.fetchUser();
     this.props.fetchUsdMxnRate();
     this.props.updateSendAmount();
-    console.log(this.props)
   }
 
   renderDashboard() {

@@ -1,4 +1,4 @@
-const ESEND_MARKUP = 0.03;
+const ESEND_MARKUP = 0.02;
 
 function calculateEsendUsdMxnRate(quoteData) {
   if (!quoteData || !quoteData.quotes.length) {
