@@ -29,7 +29,7 @@ const SendMoney = (props) => {
               Send Amount:
             </Form.Label>
             <Col xs="auto">
-              <Form.Control plaintext readOnly defaultValue={`    ${sendAmount.toFixed(2)} USD`} />
+              <Form.Control plaintext readOnly defaultValue={`    ${sendAmount} USD`} />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -37,7 +37,7 @@ const SendMoney = (props) => {
               Receive Amount:
             </Form.Label>
             <Col xs="auto">
-              <Form.Control plaintext readOnly defaultValue={`${receiveAmount.toFixed(2)} MXN`} />
+              <Form.Control plaintext readOnly defaultValue={`${receiveAmount} MXN`} />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
@@ -57,12 +57,11 @@ const SendMoney = (props) => {
 }
 function mapStateToProps(state) {
   console.log("state", state)
-  let { amounts, fxRate, rippleData } = state;
+  let { amounts, fxRate } = state;
   return { 
     sendAmount: amounts.sendAmount || 0,
     receiveAmount: amounts.receiveAmount || 0,
     fxRate,
-    // rippleData,
   };
 }
 

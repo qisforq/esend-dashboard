@@ -5,6 +5,8 @@ import Col from "react-bootstrap/Col";
 import Form from 'react-bootstrap/Form';
 
 const EsendInternalData = (props) => {
+  console.log(props);
+  
   const { sendAmount, rippleData } = props;
   if (rippleData && rippleData.payment_state) return <div />;
   
@@ -18,6 +20,14 @@ const EsendInternalData = (props) => {
             </Form.Label>
             <Col>
               <Form.Control plaintext readOnly defaultValue={rippleData ? `${rippleData.rippleSendingAmountUSD} USD` : "N/A"} />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row}>
+            <Form.Label column xs="6">
+              Amount received in Mexico:
+            </Form.Label>
+            <Col>
+              <Form.Control plaintext readOnly defaultValue={rippleData ? `${rippleData.rippleReceivingAmountMXN.toFixed(2)} MXN` : "N/A"} />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>

@@ -47,6 +47,7 @@ export const updateSenderKYC = (info = {}) => (
 // ~~~~~~~~~~~~~~~~~RIPPLE ACTIONS~~~~~~~~~~~~~~~~~~~~~
 export const lockQuote = (receiveAmount) => async (dispatch) => {
   const { data } = await axios.post('/ripple/create-quote', { receiveAmount })
+  
   dispatch({type: type.LOCK_RIPPLE_QUOTE, payload: data})
   // Dispatches to rippleReducer
 }
@@ -58,6 +59,7 @@ export const acceptQuote = (quoteId, recipientFirstName, recipientLastName, clab
     recipientLastName, 
     clabe
   });
+  
   dispatch({type: type.ACCEPT_RIPPLE_QUOTE, payload: data});
   // Dispatches to rippleReducer
 }

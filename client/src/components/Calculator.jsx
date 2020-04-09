@@ -5,18 +5,20 @@ import { updateSendAmount, updateReceiveAmount, lockQuote } from '../actions';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Col from "react-bootstrap/Col";
 import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Col from "react-bootstrap/Col";
+import Alert from 'react-bootstrap/Alert';
 
 class Calculator extends Component {
   constructor(props) {
     super(props);
     this.state = {
       receiveAmount: 0,
+      showError: false,
       //readyToTransfer: false,
     };
     this.handleChange = this.handleChange.bind(this)
@@ -38,13 +40,21 @@ class Calculator extends Component {
     // })
     await this.calculateReceiveAmount();
     // console.log("this.props.amounts:", this.props.amounts)
+    console.log(this.state.receiveAmount);
+    
   }
 
   async handleSubmit(e) {
-    await this.props.lockQuote(this.state.receiveAmount.toFixed(2))
-    await this.props.updateReceiveAmount(parseFloat(this.state.receiveAmount.toFixed(2)))
-    // await this.setState({readyToTransfer: true})
-    this.props.history.push("/send-money")
+    try {
+      await this.props.lockQuote(this.state.receiveAmount.toFixed(2))
+      await this.props.updateSendAmount(parseFloat(this.props.amounts.sendAmount.toFixed(2)))
+      await this.props.updateReceiveAmount(parseFloat(this.state.receiveAmount.toFixed(2)))
+      // await this.setState({readyToTransfer: true})
+      this.props.history.push("/send-money")
+    } catch(e) {
+      console.error(e)
+      this.setState({showError: true})
+    }
   }
 
   calculateReceiveAmount() {
@@ -61,7 +71,9 @@ class Calculator extends Component {
     // else 
     return (
         <Container>
-          <Row><h4>Send Money to Mexico!</h4></Row>
+          <Row>
+            {this.state.showError ? (<Alert variant="danger">The minimum amount you can send is $26.</Alert>) : (<h4>Send Money to Mexico!</h4>)} 
+          </Row>
           <Row>
             <Card>
               <Card.Header>

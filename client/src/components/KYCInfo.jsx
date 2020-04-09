@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import { updateSenderKYC, updateRecipientKYC, acceptQuote }from '../actions';
+import { updateSenderKYC, updateRecipientKYC }from '../actions';
 
 
 const KYCInfo = (props) => {
@@ -16,9 +16,7 @@ const KYCInfo = (props) => {
   const [senderFirstName, setSenderFirstName] = useState('');
   const [senderLastName, setSenderLastName] = useState('');
   const [clabe, setClabe] = useState('');
-  // const [showError, setShowError] = useState(false)
-    // This line was needed when acceptQuote was called here. 
-    // TODO:Move these lines to whichever Component acceptQuote is called in.
+
 
   const updateKYCInfo = () => {
     props.updateSenderKYC({senderFirstName, senderLastName});
@@ -28,9 +26,6 @@ const KYCInfo = (props) => {
   const handleSubmit = () => {
     // if (props.rippleData) 
     updateKYCInfo(senderFirstName, senderLastName, recipientFirstName, recipientLastName, clabe);
-    // else setShowError(true);
-      // These lines were needed when acceptQuote was called here. 
-      // TODO:Move these lines to whichever Component acceptQuote is called in.
   }
 
   return (
@@ -92,9 +87,6 @@ const KYCInfo = (props) => {
           </Form.Group>
         </Form>
         <Alert variant="warning">(for testing, please enter 012180001124566227 as the CLABE)</Alert>
-        {/* {showError && (<Alert variant="danger">Error! Transaction can't be completed at this time.</Alert>)} 
-        This line was needed when acceptQuote was called here.
-        TODO: Move this line to whichever Component acceptQuote is called in.*/}
       </Row>
         <br />
         <Row>
@@ -115,13 +107,11 @@ const KYCInfo = (props) => {
     </div>
   )
 }
+
 function mapDispatchToProps(dispatch) {
   return { 
     updateSenderKYC: (info) => dispatch(updateSenderKYC(info)),
     updateRecipientKYC: (info) => dispatch(updateRecipientKYC(info)),
-    // acceptQuote: (quoteId, recipientFirstName, recipientLastName, clabe) => dispatch(acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe))
-      // This line was needed when acceptQuote was called here. 
-      // TODO:Move these lines to whichever Component acceptQuote is called in.
   };
 }
 
