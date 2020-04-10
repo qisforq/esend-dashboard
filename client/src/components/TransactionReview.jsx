@@ -9,9 +9,6 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import {  acceptQuote } from '../actions';
 
-
-
-
 const TransactionReview = (props) => {
   const { sendAmount, receiveAmount, fxRate, senderFirstName, senderLastName, recipientFirstName, recipientLastName, clabe, quoteId, acceptQuote, rippleData } = props;
   const [showError, setShowError] = useState(false)

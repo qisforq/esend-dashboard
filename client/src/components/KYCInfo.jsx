@@ -19,7 +19,8 @@ const KYCInfo = (props) => {
 
 
   const updateKYCInfo = () => {
-    props.updateSenderKYC({senderFirstName, senderLastName});
+    // props.updateSenderKYC({senderFirstName, senderLastName});
+    // Above line is commented out because you'll just be pulling sender info from the user's google profile
     props.updateRecipientKYC({recipientFirstName, recipientLastName, clabe});
   }
 
@@ -42,6 +43,7 @@ const KYCInfo = (props) => {
                 value={senderFirstName}
                 onChange={e => setSenderFirstName(e.target.value)}
                 type="text"
+                // readOnly defaultValue={props.userInfo.first_name}
               />
             </Col>
             <Col>
@@ -50,6 +52,7 @@ const KYCInfo = (props) => {
                 value={senderLastName}
                 onChange={e => setSenderLastName(e.target.value)}
                 type="text"
+                // readOnly defaultValue={props.userInfo.last_name}
               />
             </Col>
           </Form.Group>
@@ -114,5 +117,11 @@ function mapDispatchToProps(dispatch) {
     updateRecipientKYC: (info) => dispatch(updateRecipientKYC(info)),
   };
 }
+
+// function mapStateToProps({ auth }) {
+//   let userInfo = auth
+//   if (!userInfo) userInfo = {first_name: 'N/A', last_name: 'N/A'}
+//   return { userInfo };
+// }
 
 export default connect(null, mapDispatchToProps)(KYCInfo);

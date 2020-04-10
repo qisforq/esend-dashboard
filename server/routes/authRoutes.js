@@ -16,7 +16,10 @@ module.exports = (app) => {
     res.redirect('/')
   })
 
-  app.get('/api/current_user', (req, res) => res.send(req.user));
+  app.get('/api/current_user', (req, res) => {
+    // console.log(req);
+    
+    res.send(req.user)});
   
   // app.get('/*', (req, res) => res.sendFile('index.html', { root: path.join(__dirname, '/../../client/dist') }));
 };

@@ -18,8 +18,8 @@ async function insertUser(firstName, lastName, googleId) {
     connectionString: databaseURI,
     ssl: true,
   });
-  const insertUserText = "INSERT INTO senders (first_name, last_name, google_profile_id) VALUES ($1, $2, $3);"
-  const searchUsersText = "SELECT * FROM senders WHERE google_profile_id = $1;"
+  const insertUserText = "INSERT INTO users (first_name, last_name, google_profile_id) VALUES ($1, $2, $3);"
+  const searchUsersText = "SELECT * FROM users WHERE google_profile_id = $1;"
   
   try {
     await client.connect()
@@ -34,7 +34,7 @@ async function insertUser(firstName, lastName, googleId) {
     } 
     else {
       await client.query(insertUserText, [firstName, lastName, googleId])
-      console.log(`Successfully added ${firstName} to senders table`)
+      console.log(`Successfully added ${firstName} to users table`)
 
       const newUserResult = await client.query(searchUsersText, [googleId])
       // await client.end()
@@ -55,7 +55,7 @@ async function findUserById(id) {
     connectionString: databaseURI,
     ssl: true,
   });
-  const findUserText = "SELECT * FROM senders WHERE id = $1;"
+  const findUserText = "SELECT * FROM users WHERE id = $1;"
   
   try {
     await client.connect()
@@ -75,7 +75,31 @@ async function findUserById(id) {
   }
 }
 
+async function insertTransaction() {
+  const client = new Client({
+    connectionString: databaseURI,
+    ssl: true,
+  });
+
+  const insertTransactionText = ""
+
+  try {
+    await client.connect()
+    console.log("Connected to database (insertTransaction)");
+    await client.query(insertTransactionText, [])
+// https://stackoverflow.com/questions/20561254/insert-data-in-3-tables-at-a-time-using-postgres
+  }
+  catch (e) {
+    console.error('ʕ⁎̯͡⁎ʔ༄ insertTransaction:', err)
+  }
+  finally {
+    await client.end()
+    console.log("Disconnected from database");
+  }
+}
+
 module.exports = {
   insertUser,
-  findUserById
+  findUserById,
+  insertTransaction,
 }

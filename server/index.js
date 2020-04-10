@@ -7,7 +7,6 @@ const enforce = require('express-sslify')
 const keys = require('./config/keys')
 const glyph = require('./extras')
 
-
 require('./services/passport');
 
 // Start CRON jobs:

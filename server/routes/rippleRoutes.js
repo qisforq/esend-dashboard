@@ -1,5 +1,6 @@
 const { createQuoteCollections, acceptQuote } = require('../services/rippleCalls');
 const { calculateEsendUsdMxnRate } = require('../calculators');
+const db = require('../../database/dbCalls');
 
 module.exports = (app) => {
   
@@ -33,14 +34,18 @@ module.exports = (app) => {
     console.log();
     
     res.send({ quoteId, rippleSendingAmountUSD, rippleReceivingAmountMXN, rippleFxRate: fxRate })
-    // TODO: Post quoteData to the database at this point.
+    // TODO: Post quoteData to the database at this point? Maybe not since there is no recipient info yet, which might cause database problems.
   })
 
   app.post('/ripple/accept-quote', async (req, res) => {
     const { quoteId, recipientFirstName, recipientLastName, clabe } = req.body
     const quoteData = await acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe);
+    console.log(req.user.id);
     
-    if (quoteData) res.send(quoteData)
+    if (quoteData) {
+      // db.insertTransaction()
+      res.send(quoteData)
+    } 
     else res.status(500).send("Error accepting Ripple quote")
     
     // TODO: Post quoteData to the database at this point, and then only send the necessary data to the client 
