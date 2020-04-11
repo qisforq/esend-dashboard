@@ -59,10 +59,10 @@ async function findUserById(id) {
   
   try {
     await client.connect()
-    console.log("Connected to database (findUserById)");
-    
+    // console.log("Connected to database (findUserById)");
     const userResult = await client.query(findUserText, [id])
     // await client.end()
+    
     return userResult.rows[0]
 
   } 
@@ -71,35 +71,11 @@ async function findUserById(id) {
   } 
   finally {
     await client.end()
-    console.log("Disconnected from database");
-  }
-}
-
-async function insertTransaction() {
-  const client = new Client({
-    connectionString: databaseURI,
-    ssl: true,
-  });
-
-  const insertTransactionText = ""
-
-  try {
-    await client.connect()
-    console.log("Connected to database (insertTransaction)");
-    await client.query(insertTransactionText, [])
-// https://stackoverflow.com/questions/20561254/insert-data-in-3-tables-at-a-time-using-postgres
-  }
-  catch (e) {
-    console.error('ʕ⁎̯͡⁎ʔ༄ insertTransaction:', err)
-  }
-  finally {
-    await client.end()
-    console.log("Disconnected from database");
+    // console.log("Disconnected from database");
   }
 }
 
 module.exports = {
   insertUser,
   findUserById,
-  insertTransaction,
 }

@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const db = require('../../database/dbCalls');
+const db = require('../../database/authDbCalls');
 const glyph = require('../extras');
 
 const googleClientID = process.env.googleClientID || require('../config/keys').googleClientID;
@@ -17,7 +17,7 @@ passport.deserializeUser((id, done) => {
   db.findUserById(id)
   .then(user => {
     if (user) {
-      console.log(`Deserializing the user named ${user.first_name}!`);
+      // console.log(`Deserializing the user named ${user.first_name}!`);
       done(null, user)
     } else {
       console.log(glyph.errorGlyph)

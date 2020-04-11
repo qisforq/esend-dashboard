@@ -25,7 +25,7 @@ const EsendInternalData = (props) => {
               Amount received in Mexico:
             </Form.Label>
             <Col>
-              <Form.Control plaintext readOnly defaultValue={rippleData ? `${rippleData.rippleReceivingAmountMXN.toFixed(2)} MXN` : "N/A"} />
+              <Form.Control plaintext readOnly defaultValue={rippleData ? `${rippleData.rippleReceivingAmountMXN} MXN` : "N/A"} />
             </Col>
           </Form.Group>
           <Form.Group as={Row}>

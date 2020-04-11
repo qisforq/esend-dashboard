@@ -16,11 +16,13 @@ const TransactionReview = (props) => {
 
   const handleSubmit = async () => {
     try {
-      await acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe)
+      console.log(senderFirstName);
+      
+      await acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount);
       console.log("transaction", quoteId,"accepted by Ripple!!");
-      setShowSuccess(true)
+      setShowSuccess(true);
     } catch(e) {
-      console.error(e)
+      console.error(e);
       setShowError(true);
     }
   }
@@ -131,7 +133,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   
   return { 
-    acceptQuote: (quoteId, recipientFirstName, recipientLastName, clabe) => dispatch(acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe))
+    acceptQuote: (quoteId, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount) => dispatch(acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount))
   };
 }
 

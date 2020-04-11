@@ -1,6 +1,6 @@
 const { createQuoteCollections, acceptQuote } = require('../services/rippleCalls');
 const { calculateEsendUsdMxnRate } = require('../calculators');
-const db = require('../../database/dbCalls');
+const db = require('../../database/rippleDbCalls');
 
 module.exports = (app) => {
   
@@ -23,8 +23,7 @@ module.exports = (app) => {
     const rippleSendingAmountUSD = quoteData.quotes[0].quote_elements[0].sending_amount;
     const rippleReceivingAmountBeforeFeeMXN = parseFloat(quoteData.quotes[0].quote_elements[3].receiving_amount);
     const receivingFee = parseFloat(quoteData.quotes[0].quote_elements[3].receiving_fee);
-    const rippleReceivingAmountMXN = (rippleReceivingAmountBeforeFeeMXN - receivingFee)
-    // .toFixed(2);
+    const rippleReceivingAmountMXN = (rippleReceivingAmountBeforeFeeMXN - receivingFee).toFixed(2);
 
     console.log(`Ripple quote just created! Quote ID: ${quoteId}`);
     console.log(`( ͡° ͜ʖ ͡°) Looks like somebody wants to send $${rippleSendingAmountUSD} to Mexico`);
@@ -38,12 +37,13 @@ module.exports = (app) => {
   })
 
   app.post('/ripple/accept-quote', async (req, res) => {
-    const { quoteId, recipientFirstName, recipientLastName, clabe } = req.body
+    const { quoteId, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount } = req.body
     const quoteData = await acceptQuote(quoteId, recipientFirstName, recipientLastName, clabe);
-    console.log(req.user.id);
-    
+    console.log("User ID:", req.user.id);
+    console.log("Ripple Quote ID:", quoteId);
+
     if (quoteData) {
-      // db.insertTransaction()
+      await db.insertTransaction(req.user.id, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount, quoteData)
       res.send(quoteData)
     } 
     else res.status(500).send("Error accepting Ripple quote")

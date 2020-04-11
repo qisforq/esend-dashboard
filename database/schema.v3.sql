@@ -1,5 +1,3 @@
--- NOTE: This schema was exported from the dbschema app. Only use this schema if schema.sql isn't working
-
 -- CREATE SCHEMA "public";
 
 CREATE SEQUENCE "public".recipients_id_seq START WITH 1;
@@ -95,7 +93,7 @@ CREATE  TABLE "public".ripple_quote_elements (
 	receiving_fee        numeric   ,
 	sending_currency_code text   ,
 	receiving_currency_code text   ,
-	transfer_currency_code numeric   ,
+	transfer_currency_code text   ,
 	CONSTRAINT ripple_quote_elements_pkey PRIMARY KEY ( quote_element_id ),
 	CONSTRAINT ripple_quote_elements_fk_quote_id_fkey FOREIGN KEY ( fk_quote_id ) REFERENCES "public".ripple_quotes( quote_id )  
  );

@@ -19,8 +19,7 @@ const KYCInfo = (props) => {
 
 
   const updateKYCInfo = () => {
-    // props.updateSenderKYC({senderFirstName, senderLastName});
-    // Above line is commented out because you'll just be pulling sender info from the user's google profile
+    props.updateSenderKYC({senderFirstName, senderLastName});
     props.updateRecipientKYC({recipientFirstName, recipientLastName, clabe});
   }
 

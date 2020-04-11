@@ -52,12 +52,18 @@ export const lockQuote = (receiveAmount) => async (dispatch) => {
   // Dispatches to rippleReducer
 }
 
-export const acceptQuote = (quoteId, recipientFirstName, recipientLastName, clabe) => async (dispatch) => {
+export const acceptQuote = (quoteId, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount) => async (dispatch) => {
+  console.log(quoteId, recipientFirstName, recipientLastName, clabe, senderFirstName, senderLastName, fxRate, sendAmount);
+  
   const { data } = await axios.post('/ripple/accept-quote', { 
     quoteId, 
     recipientFirstName, 
     recipientLastName, 
-    clabe
+    clabe,
+    senderFirstName,
+    senderLastName,
+    fxRate,
+    sendAmount,
   });
   
   dispatch({type: type.ACCEPT_RIPPLE_QUOTE, payload: data});
