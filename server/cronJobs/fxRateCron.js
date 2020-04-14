@@ -3,7 +3,7 @@ const { calculateEsendUsdMxnRate } = require('../calculators');
 
 setTimeout(async () => {
   try {
-    let quoteData = await createQuoteCollections();
+    const quoteData = await createQuoteCollections();
 
     module.exports = calculateEsendUsdMxnRate(quoteData)
   } catch(e) {
@@ -15,7 +15,7 @@ setTimeout(async () => {
 
 setInterval(async () => {
   try {
-    let quoteData = await createQuoteCollections();
+    const quoteData = await createQuoteCollections();
 
     module.exports = calculateEsendUsdMxnRate(quoteData)
   } catch(e) {

@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { errorGlyph } = require('../extras');
 const keys = require('../config/keys');
-
+const https = require('https');
 
 const xcurrentAddress = 'https://gomama.test.ripplexcurrent.com'
 
@@ -25,7 +25,7 @@ async function getRippleAuthToken() {
 }
 
 const createQuoteCollections = async (amount = 100, quoteType = "SENDER_AMOUNT") => {
-  const DISABLESSL = new require('https').Agent({  
+  const DISABLESSL = new https.Agent({  
     rejectUnauthorized: false
   });
   // WARNING: We may not want to Disable the SSL certificate in production.
@@ -67,7 +67,7 @@ const createQuoteCollections = async (amount = 100, quoteType = "SENDER_AMOUNT")
 }
 
 const acceptQuote = async (quoteId, recipientFirstName, recipientLastName, clabe) => {
-  const DISABLESSL = new require('https').Agent({  
+  const DISABLESSL = new https.Agent({  
     rejectUnauthorized: false
   });
   // WARNING: We may not want to Disable the SSL certificate in production.
@@ -121,8 +121,106 @@ const acceptQuote = async (quoteId, recipientFirstName, recipientLastName, clabe
   
 }
 
+const getPayments = async (states = 'LOCKED',page = 0) => {
+  const DISABLESSL = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  // WARNING: We may not want to Disable the SSL certificate in production.
+  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
+
+  const url = `${xcurrentAddress}/v4/payments?connector_role=SENDING&states=${states}&page=${page}`
+
+  const config = {
+    headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
+    httpsAgent: DISABLESSL,
+  };
+
+  try {
+    const { data } = await axios.get(url, config)
+
+    if (data === undefined) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: data is undefined (getPayments in rippleCalls.js)`
+    } else if (data.error) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: ${data.error} (getPayments in rippleCalls.js)`
+    } else {
+      return data 
+    }
+  }
+  catch (e) {
+    // console.error(errorGlyph, e.message, "ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ Error from Ripple:", e.response.data.error, "(getPayments in rippleCalls.js)")
+    console.log(e);
+    
+  }
+  
+}
+
+const settlePayment = async (paymentId) => {
+  const DISABLESSL = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  // WARNING: We may not want to Disable the SSL certificate in production.
+  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
+  const url = `${xcurrentAddress}/v4/payments/${paymentId}/settle`
+
+  const config = {
+    headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
+    httpsAgent: DISABLESSL,
+  };
+
+  try {
+    const { data } = await axios.post(url, {}, config)
+
+    if (data === undefined) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: data is undefined (settlePayment in rippleCalls.js)`
+    } else if (data.error) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: ${data.error} (settlePayment in rippleCalls.js)`
+    } else {
+      return data 
+    }
+  }
+  catch (e) {
+    // console.error(errorGlyph, e.message, "ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ Error from Ripple:", e.response.data.error, "(settlePayment in rippleCalls.js)")
+    console.log(e);
+    
+  }
+}
+
+const getPaymentById = async (paymentId) => {
+  const DISABLESSL = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  // WARNING: We may not want to Disable the SSL certificate in production.
+  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
+  const url = `${xcurrentAddress}/v4/payments/${paymentId}`
+
+  const config = {
+    headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
+    httpsAgent: DISABLESSL,
+  };
+
+  try {
+    const { data } = await axios.get(url, config)
+
+    if (data === undefined) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: data is undefined (getPaymentById in rippleCalls.js)`
+    } else if (data.error) {
+      throw `ʕ⁎̯͡⁎ʔ༄ ERROR: ${data.error} (getPaymentById in rippleCalls.js)`
+    } else {
+      return data 
+    }
+  }
+  catch (e) {
+    // console.error(errorGlyph, e.message, "ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ Error from Ripple:", e.response.data.error, "(getPaymentById in rippleCalls.js)")
+    console.log(e);
+    
+  }
+}
+
 module.exports = {
   getRippleAuthToken,
   createQuoteCollections,
   acceptQuote,
+  getPayments,
+  settlePayment,
+  getPaymentById,
 }

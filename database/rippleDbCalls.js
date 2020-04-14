@@ -94,6 +94,110 @@ async function addPerson(client, searchText, insertText, personInfo, type = 'per
 }
 
 
+async function updatePaymentState(paymentId, paymentState) {
+  const client = new Client({
+    connectionString: databaseURI,
+    ssl: true,
+  });
+
+  const updatePaymentStateText = "UPDATE ripple_payments SET payment_state=$1 WHERE payment_id=$2;";
+
+  try {
+    await client.connect()
+    // console.log("Connected to database (updatePaymentState)");
+    
+    await client.query(updatePaymentStateText, [paymentState, paymentId]);
+
+    console.log(`Payment ${paymentId} updated to ${paymentState} in database!`)
+  }
+  catch (e) {
+    console.error('ʕ⁎̯͡⁎ʔ༄ updatePaymentState:', e)
+  }
+  finally {
+    await client.end()
+    // console.log("Disconnected from database (updatePaymentState)");
+  }
+}
+
+async function searchPendingTransactions() {
+  const client = new Client({
+    connectionString: databaseURI,
+    ssl: true,
+  });
+
+  const searchText = "SELECT * FROM ripple_payments WHERE payment_state = 'PREPARED' OR payment_state = 'ACCEPTED' OR payment_state = 'EXECUTED';";
+
+  try {
+    await client.connect()
+    // console.log("Connected to database (searchPendingTransactions)");
+    
+    const result = (await client.query(searchText)).rows;
+
+    return result;
+  }
+  catch (e) {
+    console.error('ʕ⁎̯͡⁎ʔ༄ searchPendingTransactions:', e)
+  }
+  finally {
+    await client.end()
+    // console.log("Disconnected from database (searchPendingTransactions)");
+  }
+}
+
+async function searchTransactionById(id, field = '*') {
+  const client = new Client({
+    connectionString: databaseURI,
+    ssl: true,
+  });
+
+  const searchText = `SELECT ${field} FROM transactions WHERE id = $1;`;
+
+  try {
+    await client.connect()
+    // console.log("Connected to database (searchTransactionById)");
+    
+    const result = (await client.query(searchText, [id])).rows[0];
+
+    return result;
+  }
+  catch (e) {
+    console.error('ʕ⁎̯͡⁎ʔ༄ searchTransactionById:', e)
+  }
+  finally {
+    await client.end()
+    // console.log("Disconnected from database (searchTransactionById)");
+  }
+}
+
+async function searchSendersById(id, field) {
+  const client = new Client({
+    connectionString: databaseURI,
+    ssl: true,
+  });
+
+  const searchText = `SELECT ${field} FROM senders WHERE id = $1;`;
+
+  try {
+    await client.connect()
+    // console.log("Connected to database (searchSendersById)");
+    
+    const result = (await client.query(searchText, [id])).rows[0];
+
+    return result;
+  }
+  catch (e) {
+    console.error('ʕ⁎̯͡⁎ʔ༄ searchSendersById:', e)
+  }
+  finally {
+    await client.end()
+    // console.log("Disconnected from database (searchSendersById)");
+  }
+}
+
 module.exports = {
   insertTransaction,
+  updatePaymentState,
+  searchPendingTransactions,
+  searchTransactionById,
+  searchSendersById,
 }

@@ -13,6 +13,8 @@ require('./services/passport');
 require('./cronJobs/rippleAuthCron');
 // Note: This is to start the Ripple Auth CRON JOB. Whenever using the Ripple Auth Token, for some reason the first time you call it it's just an empty object. So we have to require it onetime first before it works. Which is why we are requiring it here. 
 require('./cronJobs/fxRateCron');
+require('./cronJobs/settlePaymentsCron');
+require('./cronJobs/updatePaymentStatesCron');
 
 const app = express();
 
