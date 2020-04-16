@@ -2,9 +2,11 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const db = require('../../database/authDbCalls');
 const glyph = require('../extras');
+const keys = require('../config/keys');
 
-const googleClientID = process.env.googleClientID || require('../config/keys').googleClientID;
-const googleClientSecret = process.env.googleClientSecret || require('../config/keys').googleClientSecret;
+const googleClientID = keys.googleClientID;
+const googleClientSecret = keys.googleClientSecret;
+const useWhitelist = keys.useWhitelist;
 
 passport.serializeUser((user, done) => {
   console.log(`Serializing the user named ${user.first_name}!`);
@@ -39,10 +41,22 @@ passport.use(new GoogleStrategy({
   const lastName = name.familyName
 
   try {
-    const userObj = await db.insertUser(firstName, lastName, id)
-    console.log('( ͡° ͜ʖ ͡°)', userObj.user);
-    if (userObj.whitelisted) done(null, userObj.user)
-    else done(null, false)
+    console.log(`data type of variable useWhitelist: ${typeof useWhitelist}`)
+    if (useWhitelist === 'true') {
+      console.log('WHITELIST IS ON!!!!!!!!!!!!!!!!!!!!!')
+      const userObj = await db.insertUser(firstName, lastName, id)
+      console.log('( ͡° ͜ʖ ͡°)', userObj.user);
+      if (userObj.whitelisted) done(null, userObj.user)
+      else done(null, false)
+    }
+    else {
+      console.log('WHITELIST IS OFF!!!!!!!!!!!!!!!!!!!!!')
+
+      // Uncomment below if you are no longe using a whitelist:
+      const user = (await db.insertUser(firstName, lastName, id)).user
+      console.log('( ͡° ͜ʖ ͡°)', user);
+      done(null, user)
+    }
   }
   catch(err) {
     console.log(glyph.errorGlyph);

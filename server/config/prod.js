@@ -6,4 +6,5 @@ module.exports = {
   cookieKey: process.env.COOKIE_KEY,
   rippleClientID: process.env.RIPPLE_CLIENT_ID,
   rippleClientSecret: process.env.RIPPLE_CLIENT_SECRET,
+  useWhitelist: process.env.USE_WHITELIST,
 }

@@ -1,8 +1,9 @@
 const keys = require('../server/config/keys');
 const { Client } = require('pg');
 
-const databaseURI = process.env.DATABASE_URL || keys.herokuPostgresURI
+const databaseURI = keys.herokuPostgresURI;
 
+const useWhitelist = keys.useWhitelist;
 // const client = new Client({
 //   connectionString: databaseURI,
 //   ssl: true,
@@ -37,24 +38,34 @@ async function insertUser(firstName, lastName, googleId) {
       // Return the user info in an object with the whitelist paramater set to true:
       return { whitelisted: true, user: existingUserResult.rows[0] }
     } 
-    else {
+    else if (useWhitelist === 'true') {
+      console.log('WHITELIST IS ON!!!!!!!!!!!!!!!!!!!!!')
       // WHITELIST FEATURE: if you are NOT already in the database, you are not a whitelisted user! 
       // Into the unnapproved table you go!
-      await client.query(insertUnapprovedUserText, [firstName, lastName, googleId])
-      console.log(`${firstName} is not on the whitelist! Added ${firstName} to UNAPPROVED USERS table`)
+      console.log(`${firstName} is not on the whitelist!`)
+      let unapprovedUserResult = await client.query(searchUnapprovedUsersText, [googleId])
+
+      // If user in unnappoved table already, return the user info in an object with the whitelist paramater set to FALSE:
+      if (unapprovedUserResult.rows.length) return { whitelisted: false, user: unapprovedUserResult.rows[0] }
       
-      const unapprovedUserResult = (await client.query(searchUnapprovedUsersText, [googleId])).rows[0]
+      // Otherwise, add user to unnaproved table
+      await client.query(insertUnapprovedUserText, [firstName, lastName, googleId])
+      console.log('Into the UNAPPROVED USERS table they go!');
+      
+      unapprovedUserResult = (await client.query(searchUnapprovedUsersText, [googleId])).rows[0]
       // Return the user info in an object with the whitelist paramater set to FALSE:
       return { whitelisted: false, user: unapprovedUserResult }
     }
     // UNCOMMENT the below ELSE STATEMENT if you are no longer using a whitelist.
-    // else {
-    //   await client.query(insertUserText, [firstName, lastName, googleId])
-    //   console.log(`Successfully added ${firstName} to users table`)
+    else if (useWhitelist === 'false') {
+      console.log('WHITELIST IS OFF!!!!!!!!!!!!!!!');
+      
+      await client.query(insertUserText, [firstName, lastName, googleId])
+      console.log(`Successfully added ${firstName} to users table`)
 
-    //   const newUserResult = await client.query(searchUsersText, [googleId])
-    //   return newUserResult.rows[0]
-    // }
+      const newUserResult = await client.query(searchUsersText, [googleId])
+      return { user: newUserResult.rows[0] }
+    }
   } 
   catch (err) {
     console.error('( ͡° ͜ʖ ͡°) insertUser:', err)
