@@ -18,7 +18,7 @@ setInterval(async () => {
   } catch(e) {
     console.error(e)
   }
-}, 1 * 60 * 1000)
+}, 2 * 60 * 1000)
 // 30 * 60 * 1000 = 30 minutes in milliseconds
 
 async function settleLockedPayment(payments) {

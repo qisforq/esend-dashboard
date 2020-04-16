@@ -57,7 +57,7 @@ async function insertUser(firstName, lastName, googleId) {
       return { whitelisted: false, user: unapprovedUserResult }
     }
     // UNCOMMENT the below ELSE STATEMENT if you are no longer using a whitelist.
-    else if (useWhitelist === 'false') {
+    else {
       console.log('WHITELIST IS OFF!!!!!!!!!!!!!!!');
       
       await client.query(insertUserText, [firstName, lastName, googleId])

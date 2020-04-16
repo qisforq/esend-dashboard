@@ -43,14 +43,14 @@ passport.use(new GoogleStrategy({
   try {
     console.log(`data type of variable useWhitelist: ${typeof useWhitelist}`)
     if (useWhitelist === 'true') {
-      console.log('WHITELIST IS ON!!!!!!!!!!!!!!!!!!!!!')
+      console.log('WHITELIST IS ON')
       const userObj = await db.insertUser(firstName, lastName, id)
       console.log('( ͡° ͜ʖ ͡°)', userObj.user);
       if (userObj.whitelisted) done(null, userObj.user)
       else done(null, false)
     }
     else {
-      console.log('WHITELIST IS OFF!!!!!!!!!!!!!!!!!!!!!')
+      console.log('WHITELIST IS OFF')
 
       // Uncomment below if you are no longe using a whitelist:
       const user = (await db.insertUser(firstName, lastName, id)).user
