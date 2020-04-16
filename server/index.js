@@ -6,7 +6,7 @@ const cookieSession = require('cookie-session')
 const enforce = require('express-sslify')
 const keys = require('./config/keys')
 const glyph = require('./extras')
-
+const axios = require('axios')
 require('./services/passport');
 
 // Start CRON jobs:
@@ -46,6 +46,18 @@ app.listen(PORT, () => {
   console.log(`listening on port ${PORT}!`);
   console.log(glyph.esendGlyph);
   console.log(glyph.bannerMessage);
+
+  require('http').get({
+    host: 'ipv4bot.whatismyipaddress.com',
+    port: 80,
+    path: '/'
+  }, function(res) {
+    res.on("data", function(chunk) {
+      console.log("IP Address: " + chunk);
+    });
+  }).on('error', function(e) {
+    console.log("error: " + e.message);
+  });
 });
 
 

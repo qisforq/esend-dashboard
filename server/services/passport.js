@@ -39,9 +39,10 @@ passport.use(new GoogleStrategy({
   const lastName = name.familyName
 
   try {
-    const user = await db.insertUser(firstName, lastName, id)
-    console.log('( ͡° ͜ʖ ͡°)', user);
-    done(null, user)
+    const userObj = await db.insertUser(firstName, lastName, id)
+    console.log('( ͡° ͜ʖ ͡°)', userObj.user);
+    if (userObj.whitelisted) done(null, userObj.user)
+    else done(null, false)
   }
   catch(err) {
     console.log(glyph.errorGlyph);

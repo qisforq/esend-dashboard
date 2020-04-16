@@ -20,6 +20,8 @@ async function insertUser(firstName, lastName, googleId) {
   });
   const insertUserText = "INSERT INTO users (first_name, last_name, google_profile_id) VALUES ($1, $2, $3);"
   const searchUsersText = "SELECT * FROM users WHERE google_profile_id = $1;"
+  const insertUnapprovedUserText = "INSERT INTO unapproved_users (first_name, last_name, google_profile_id) VALUES ($1, $2, $3);"
+  const searchUnapprovedUsersText = "SELECT * FROM unapproved_users WHERE google_profile_id = $1;"
   
   try {
     await client.connect()
@@ -29,17 +31,30 @@ async function insertUser(firstName, lastName, googleId) {
 
     if (existingUserResult.rows.length) {
       console.log(`${firstName} is already in the database`);
-      // await client.end()
-      return existingUserResult.rows[0]
+      // return existingUserResult.rows[0]
+
+      // WHITELIST FEATURE: if you are already in the database, you are a whitelisted user! 
+      // Return the user info in an object with the whitelist paramater set to true:
+      return { whitelisted: true, user: existingUserResult.rows[0] }
     } 
     else {
-      await client.query(insertUserText, [firstName, lastName, googleId])
-      console.log(`Successfully added ${firstName} to users table`)
-
-      const newUserResult = await client.query(searchUsersText, [googleId])
-      // await client.end()
-      return newUserResult.rows[0]
+      // WHITELIST FEATURE: if you are NOT already in the database, you are not a whitelisted user! 
+      // Into the unnapproved table you go!
+      await client.query(insertUnapprovedUserText, [firstName, lastName, googleId])
+      console.log(`${firstName} is not on the whitelist! Added ${firstName} to UNAPPROVED USERS table`)
+      
+      const unapprovedUserResult = (await client.query(searchUnapprovedUsersText, [googleId])).rows[0]
+      // Return the user info in an object with the whitelist paramater set to FALSE:
+      return { whitelisted: false, user: unapprovedUserResult }
     }
+    // UNCOMMENT the below ELSE STATEMENT if you are no longer using a whitelist.
+    // else {
+    //   await client.query(insertUserText, [firstName, lastName, googleId])
+    //   console.log(`Successfully added ${firstName} to users table`)
+
+    //   const newUserResult = await client.query(searchUsersText, [googleId])
+    //   return newUserResult.rows[0]
+    // }
   } 
   catch (err) {
     console.error('( ͡° ͜ʖ ͡°) insertUser:', err)
