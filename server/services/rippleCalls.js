@@ -2,6 +2,7 @@ const axios = require('axios');
 const { errorGlyph } = require('../extras');
 const keys = require('../config/keys');
 const https = require('https');
+const readSSLCert = require('./readSSLCert');
 
 const xcurrentAddress = 'https://gomama.test.ripplexcurrent.com'
 
@@ -25,15 +26,15 @@ async function getRippleAuthToken() {
 }
 
 const createQuoteCollections = async (amount = 100, quoteType = "SENDER_AMOUNT") => {
-  const DISABLESSL = new https.Agent({  
-    rejectUnauthorized: false
+  const caCrt = await readSSLCert();
+  // const DISABLESSL = new https.Agent({ rejectUnauthorized: false });
+  const SSL = new https.Agent({  
+    ca: caCrt,
+    keepAlive: false
   });
-  // WARNING: We may not want to Disable the SSL certificate in production.
-  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
-  // see here for more info: https://stackoverflow.com/questions/51363855/how-to-configure-axios-to-use-ssl-certificate
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
-    httpsAgent: DISABLESSL,
+    httpsAgent: SSL,
   };
   let currency = "USD"
   if (quoteType === "RECEIVER_AMOUNT") currency = "MXN"
@@ -61,21 +62,24 @@ const createQuoteCollections = async (amount = 100, quoteType = "SENDER_AMOUNT")
     }
   }
   catch (e) {
-    console.error(errorGlyph, e.message, "ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ Error from Ripple:", e.response.data.error, "(createQuoteCollections in rippleCalls.js)")
+    let msg;
+    e.hasOwnProperty('response') ? msg = e.response : msg = e
+    console.error(errorGlyph, e.message, "ʕ•̫͡•ʕ•̫͡•ʔ•̫͡•ʔ Error from Ripple:", msg, "(createQuoteCollections in rippleCalls.js)")
   }
   
 }
 
 const acceptQuote = async (quoteId, recipientFirstName, recipientLastName, clabe) => {
-  const DISABLESSL = new https.Agent({  
-    rejectUnauthorized: false
+  const caCrt = await readSSLCert();
+  // const DISABLESSL = new https.Agent({ rejectUnauthorized: false });
+  const SSL = new https.Agent({  
+    ca: caCrt,
+    keepAlive: false
   });
-  // WARNING: We may not want to Disable the SSL certificate in production.
-  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
-  // see here for more info: https://stackoverflow.com/questions/51363855/how-to-configure-axios-to-use-ssl-certificate
+
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
-    httpsAgent: DISABLESSL,
+    httpsAgent: SSL,
   };
   
   const url = xcurrentAddress + '/v4/payments/accept';
@@ -122,17 +126,18 @@ const acceptQuote = async (quoteId, recipientFirstName, recipientLastName, clabe
 }
 
 const getPayments = async (states = 'LOCKED',page = 0) => {
-  const DISABLESSL = new https.Agent({  
-    rejectUnauthorized: false
+  const caCrt = await readSSLCert();
+  // const DISABLESSL = new https.Agent({ rejectUnauthorized: false });
+  const SSL = new https.Agent({  
+    ca: caCrt,
+    keepAlive: false
   });
-  // WARNING: We may not want to Disable the SSL certificate in production.
-  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
 
   const url = `${xcurrentAddress}/v4/payments?connector_role=SENDING&states=${states}&page=${page}`
 
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
-    httpsAgent: DISABLESSL,
+    httpsAgent: SSL,
   };
 
   try {
@@ -155,16 +160,17 @@ const getPayments = async (states = 'LOCKED',page = 0) => {
 }
 
 const settlePayment = async (paymentId) => {
-  const DISABLESSL = new https.Agent({  
-    rejectUnauthorized: false
+  const caCrt = await readSSLCert();
+  // const DISABLESSL = new https.Agent({ rejectUnauthorized: false });
+  const SSL = new https.Agent({  
+    ca: caCrt,
+    keepAlive: false
   });
-  // WARNING: We may not want to Disable the SSL certificate in production.
-  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
   const url = `${xcurrentAddress}/v4/payments/${paymentId}/settle`
 
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
-    httpsAgent: DISABLESSL,
+    httpsAgent: SSL,
   };
 
   try {
@@ -186,16 +192,18 @@ const settlePayment = async (paymentId) => {
 }
 
 const getPaymentById = async (paymentId) => {
-  const DISABLESSL = new https.Agent({  
-    rejectUnauthorized: false
+  const caCrt = await readSSLCert();
+  // const DISABLESSL = new https.Agent({ rejectUnauthorized: false });
+  const SSL = new https.Agent({  
+    ca: caCrt,
+    keepAlive: false
   });
-  // WARNING: We may not want to Disable the SSL certificate in production.
-  // I disabled it because I got an 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' error message.
+
   const url = `${xcurrentAddress}/v4/payments/${paymentId}`
 
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
-    httpsAgent: DISABLESSL,
+    httpsAgent: SSL,
   };
 
   try {
@@ -215,6 +223,8 @@ const getPaymentById = async (paymentId) => {
     
   }
 }
+
+
 
 module.exports = {
   getRippleAuthToken,

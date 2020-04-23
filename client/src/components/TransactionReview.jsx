@@ -94,9 +94,6 @@ const TransactionReview = (props) => {
             <p>
               This transaction has been submitted to Ripple and Payment State is now {rippleData.payment_state}. However, this transaction isn't technically executed until eSend SETTLES the payment, which it will do using a CRON script that runs the "Settle Payments" function at a set time interval. 
             </p>
-            <p>
-              But first Quentin has to implement all the database functions that will persist this transaction data to the database.
-            </p>
           </Alert>
         )} 
       </Row>

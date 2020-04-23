@@ -6,3 +6,4 @@ client/dist/bin.js
 client/dist/bundle.js
 client/dist/index.html
 dev.js
+ripple-root-ca.crt

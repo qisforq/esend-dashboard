@@ -21,7 +21,7 @@ setInterval(async () => {
   } catch(e) {
     console.error(e)
   }
-}, 30 * 60 * 1000)
+}, 5 * 60 * 1000)
 // 30 * 60 * 1000 = 30 minutes in milliseconds
 
 // function calculateUsdMxnFxRate(quoteData) {

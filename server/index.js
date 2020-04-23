@@ -2,12 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
-const cookieSession = require('cookie-session')
-const enforce = require('express-sslify')
-const keys = require('./config/keys')
-const glyph = require('./extras')
-const axios = require('axios')
+const cookieSession = require('cookie-session');
+const enforce = require('express-sslify');
+const keys = require('./config/keys');
+const glyph = require('./extras');
 require('./services/passport');
+
 
 // Start CRON jobs:
 require('./cronJobs/rippleAuthCron');
