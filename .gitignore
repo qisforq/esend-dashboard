@@ -7,3 +7,4 @@ client/dist/bundle.js
 client/dist/index.html
 dev.js
 ripple-root-ca.crt
+conf/
