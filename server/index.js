@@ -40,7 +40,7 @@ app.get('/*', (req, res) => res.sendFile('index.html', { root: path.join(__dirna
 /* ^^^^^ Paths that are handled by the client-side router (CSR), i.e. React Router, don't actually have any handling logic here in the server.
 Therefore, all routes that were not handled by authRoutes (or any other route logic), should just redirect to index.html. */
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}!`);
