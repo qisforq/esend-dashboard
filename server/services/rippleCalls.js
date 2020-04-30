@@ -4,13 +4,13 @@ const keys = require('../config/keys');
 const https = require('https');
 const readSSLCert = require('./readSSLCert');
 
-const xcurrentAddress = 'https://gomama.test.ripplexcurrent.com'
+// const xcurrentAddress = 'https://gomama.test.ripplexcurrent.com'
 
 async function getRippleAuthToken() {
   let url = 'https://ripplenet-production-eu.eu.auth0.com/oauth/token'
   let body = {
     grant_type: "client_credentials",
-    audience: "urn:ripplexcurrent-test:gomama",
+    audience: keys.rippleAudience,
     client_id: keys.rippleClientID,
     client_secret: keys.rippleClientSecret
   }
@@ -39,10 +39,10 @@ const createQuoteCollections = async (amount = 100, quoteType = "SENDER_AMOUNT")
   let currency = "USD"
   if (quoteType === "RECEIVER_AMOUNT") currency = "MXN"
   
-  const url = xcurrentAddress + '/v4/quote_collections'
+  const url = keys.rippleXCurrentAddress + '/v4/quote_collections'
   const body = {
-    sending_address: "test.usa.gomama",
-    receiving_address: "test.xrapid.gomama",
+    sending_address: keys.rippleSendingAddress,
+    receiving_address: keys.rippleReceivingAddress,
     amount,
     currency,
     quote_type: quoteType,
@@ -82,7 +82,7 @@ const acceptQuote = async (quoteId, recipientFirstName, recipientLastName, clabe
     httpsAgent: SSL,
   };
   
-  const url = xcurrentAddress + '/v4/payments/accept';
+  const url = keys.rippleXCurrentAddress + '/v4/payments/accept';
   const body = {
     quote_id: quoteId,
     user_info: {
@@ -133,7 +133,7 @@ const getPayments = async (states = 'LOCKED',page = 0) => {
     keepAlive: false
   });
 
-  const url = `${xcurrentAddress}/v4/payments?connector_role=SENDING&states=${states}&page=${page}`
+  const url = `${keys.rippleXCurrentAddress}/v4/payments?connector_role=SENDING&states=${states}&page=${page}`
 
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
@@ -166,7 +166,7 @@ const settlePayment = async (paymentId) => {
     ca: caCrt,
     keepAlive: false
   });
-  const url = `${xcurrentAddress}/v4/payments/${paymentId}/settle`
+  const url = `${keys.rippleXCurrentAddress}/v4/payments/${paymentId}/settle`
 
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
@@ -199,7 +199,7 @@ const getPaymentById = async (paymentId) => {
     keepAlive: false
   });
 
-  const url = `${xcurrentAddress}/v4/payments/${paymentId}`
+  const url = `${keys.rippleXCurrentAddress}/v4/payments/${paymentId}`
 
   const config = {
     headers: { Authorization: `Bearer ${require('../cronJobs/rippleAuthCron')}` },
