@@ -32,7 +32,7 @@ npm start
 
 ## Built With
 
-* [RippleNet†](https://ripple.com/ripplenet/)
+* [RippleNet](https://ripple.com/ripplenet/)
 * [React](https://reactjs.org)
 * [Redux](https://react-redux.js.org)
 * [Passport](http://www.passportjs.org)
