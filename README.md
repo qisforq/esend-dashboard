@@ -9,7 +9,7 @@ Proof-of-concept application for executing money transfers from the U.S. to Mexi
 
 1. [Team](#team)
 2. [Development](#development)
-4. [Built With](#built)
+4. [Built With](#built with)
 
 ## Team
 
