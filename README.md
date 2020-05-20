@@ -1,7 +1,7 @@
 # Esend-Ripple Dashboard
 
 
-<img src="https://static.wixstatic.com/media/a4bb67_7d31ea46c3c2410890404ae49524d848~mv2.png/v1/fill/w_538,h_306,al_c,q_85,usm_0.66_1.00_0.01/ESend%20Logo%20-%20White.webp" width="350">
+<img src="https://static.wixstatic.com/media/a4bb67_f4c0f750e8674d3c88f618d3ac5333f0~mv2.png/v1/crop/x_0,y_0,w_334,h_190/fill/w_298,h_160,al_c,q_85,usm_0.66_1.00_0.01/ESend%20Logo%20-%20Blue%20-small%20w%20bleed.webp" width="300">
 
 
 Proof-of-concept application for executing money transfers from the U.S. to Mexico, using the Ripple blockchain network as the payment settlement system
